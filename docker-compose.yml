@@ -12,7 +12,7 @@ services:
       - retail-network
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/0-init.sql
+      - ./init-db.sql:/docker-entrypoint-initdb.d/0-init.sql
 
   retail-frontend:
     # build: .  # uncomment if you have local Dockerfile
