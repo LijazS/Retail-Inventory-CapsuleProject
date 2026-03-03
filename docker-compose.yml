@@ -1,0 +1,39 @@
+name: retail
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: retaildb
+      MYSQL_USER: retailuser
+      MYSQL_PASSWORD: retailpass
+    networks:
+      - retail-network
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/0-init.sql
+
+  retail-frontend:
+    # build: .  # uncomment if you have local Dockerfile
+    build:
+      context: ./Dockerfile
+      dockerfile: Dockerfile
+    container_name: retail-frontend
+    ports:
+      - "3000:80"
+    networks:
+      - retail-network
+    env_file:
+      - .env
+    volumes:
+      - retail_data:/usr/share/nginx/html  # fixed: named volume
+
+networks:
+  retail-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  retail_data:
+
